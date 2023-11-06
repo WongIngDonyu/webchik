@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -23,45 +24,55 @@ public class OfferController {
 
     @GetMapping("/all")
     public String viewAllOffers(Model model){
-        model.addAttribute(offerService.getAll());
+        List<OfferDto> offers = offerService.getAll();
+        model.addAttribute("offers", offers);
         return "allOffers";
     }
 
     @GetMapping("/find/{id}")
     public String findOffer(Model model, @PathVariable("id") UUID uuid){
-        model.addAttribute(offerService.findOffer(uuid));
-        return "findOffer";
+        Optional<OfferDto> dbOffer = offerService.findOffer(uuid);
+        if(dbOffer.isPresent()){
+            OfferDto offerDto = dbOffer.get();
+            model.addAttribute("offerDto", offerDto);
+            return "findOffer";
+        }
+        else {
+            return "offerNotFound";
+        }
+
     }
 
-    @DeleteMapping("/delete/{id}")
+    @PostMapping("/delete/{id}")
     public String deleteOffer(@PathVariable("id") UUID uuid){
         offerService.delete(uuid);
         return "redirect:/offer/all";
     }
 
     @GetMapping("/create")
-    public String addNewOffer(){
+    public String addNewOffer(Model model){
+        model.addAttribute("offerDto", new OfferDto());
         return "addNewOffer";
     }
 
     @PostMapping("/create")
-    public String addNewOffer(@RequestBody OfferDto offerDto){
+    public String addNewOffer(@ModelAttribute OfferDto offerDto){
         offerService.add(offerDto);
         return "redirect:/offer/all";
     }
     @GetMapping("/change/{id}")
     public String changeOffer(Model model, @PathVariable("id") UUID uuid){
-        Optional<Offer> dbOffer = offerService.findOffer(uuid);
+        Optional<OfferDto> dbOffer = offerService.findOffer(uuid);
         if (dbOffer.isPresent()) {
-            OfferDto offerDto = modelMapper.map(dbOffer.get(), OfferDto.class);
-            model.addAttribute("model", offerDto);
+            OfferDto offerDto = dbOffer.get();
+            model.addAttribute("offerDto", offerDto);
             return "editOffer";
         } else {
             return "offerNotFound";
         }
     }
     @PostMapping("/change/{id}")
-    public String saveChangeOffer(@PathVariable("id") UUID uuid, @RequestBody OfferDto offerDto) {
+    public String saveChangeOffer(@PathVariable("id") UUID uuid, @ModelAttribute OfferDto offerDto) {
         Optional<Offer> dbOffer = offerService.findOffer(uuid);
         if (dbOffer.isPresent()) {
             offerService.update(offerDto);

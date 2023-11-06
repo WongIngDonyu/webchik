@@ -1,12 +1,14 @@
 package com.example.webchick.web;
 
 import com.example.webchick.services.ModelService;
+import com.example.webchick.services.dtos.BrandDto;
 import com.example.webchick.services.dtos.ModelDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,45 +24,54 @@ public class ModelController {
 
     @GetMapping("/all")
     public String viewAllModels(Model model){
-        model.addAttribute(modelService.getAll());
+        List<ModelDto> models = modelService.getAll();
+        model.addAttribute("models",models);
         return "allModels";
     }
 
     @GetMapping("/find/{id}")
     public String findModel(Model model, @PathVariable("id") UUID uuid){
-        model.addAttribute(modelService.findModel(uuid));
-        return "findModel";
+        Optional<ModelDto> dbModel = modelService.findModel(uuid);
+        if(dbModel.isPresent()){
+            ModelDto modelDto = dbModel.get();
+            model.addAttribute("modelDto",modelDto);
+            return "findModel";
+        }
+        else{
+            return "modelNotFound";
+        }
     }
 
-    @DeleteMapping("/delete/{id}")
+    @PostMapping("/delete/{id}")
     public String deleteModel(@PathVariable("id") UUID uuid){
         modelService.delete(uuid);
         return "redirect:/model/all";
     }
 
     @GetMapping("/create")
-    public String addNewModel(){
+    public String addNewModel(Model model){
+        model.addAttribute("modelDto", new ModelDto());
         return "addNewModel";
     }
 
     @PostMapping("/create")
-    public String addNewModel(@RequestBody ModelDto modelDto){
+    public String addNewModel(@ModelAttribute("modelDto") ModelDto modelDto){
         modelService.add(modelDto);
         return "redirect:/model/all";
     }
     @GetMapping("/change/{id}")
     public String changeModel(Model model, @PathVariable("id") UUID uuid){
-        Optional<Model> dbModel = modelService.findModel(uuid);
+        Optional<ModelDto> dbModel = modelService.findModel(uuid);
         if (dbModel.isPresent()) {
-            ModelDto modelDto = modelMapper.map(dbModel.get(), ModelDto.class);
-            model.addAttribute("model", modelDto);
+            ModelDto modelDto = dbModel.get();
+            model.addAttribute("modelDto", modelDto);
             return "editModel";
         } else {
             return "modelNotFound";
         }
     }
     @PostMapping("/change/{id}")
-    public String saveChangeModel(@PathVariable("id") UUID uuid, @RequestBody ModelDto modelDto) {
+    public String saveChangeModel(@PathVariable("id") UUID uuid, @ModelAttribute ModelDto modelDto) {
         Optional<Model> dbModel = modelService.findModel(uuid);
         if (dbModel.isPresent()) {
             modelService.update(modelDto);

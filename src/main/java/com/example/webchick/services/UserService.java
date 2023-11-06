@@ -19,4 +19,5 @@ public interface UserService <I extends UUID>{
     UserDto add(UserDto user);
     UserDto update(UserDto user);
     User findByUsername (String username);
+    void activation(UUID id);
 }

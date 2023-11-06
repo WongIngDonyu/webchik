@@ -1,17 +1,25 @@
 package com.example.webchick.services.dtos;
 
 import com.example.webchick.models.UserRole;
+import lombok.Getter;
 
 import java.util.UUID;
 
 public class UserDto {
+    @Getter
     private UUID id;
+    @Getter
     private String username;
+    @Getter
     private String password;
+    @Getter
     private String firstName;
+    @Getter
     private String lastName;
     private boolean isActive;
+    @Getter
     private String imageUrl;
+    @Getter
     private UserRole.Role role;
     public UserDto(){}
 
@@ -26,40 +34,20 @@ public class UserDto {
         this.role = role;
     }
 
-    public UUID getId() {
-        return id;
-    }
-
     public void setId(UUID id) {
         this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
     }
 
     public void setUsername(String username) {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
     }
 
     public void setLastName(String lastName) {
@@ -74,16 +62,8 @@ public class UserDto {
         isActive = active;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
-    }
-
-    public UserRole.Role getRole() {
-        return role;
     }
 
     public void setRole(UserRole.Role role) {

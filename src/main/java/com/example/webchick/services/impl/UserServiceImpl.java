@@ -36,7 +36,12 @@ public class UserServiceImpl implements UserService<UUID> {
 
     @Override
     public void delete(UUID id) {
-        userRepository.deleteById(id);
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            user.setActive(false);
+            userRepository.save(user);
+        }
     }
 
     @Override
@@ -54,6 +59,7 @@ public class UserServiceImpl implements UserService<UUID> {
         User u = modelMapper.map(user, User.class);
         u.setUserRole(userRoleService.findRoleByName(user.getRole()));
         u.setCreated(LocalDateTime.now());
+        u.setActive(true);
         return modelMapper.map(userRepository.save(u), UserDto.class);
     }
 
@@ -74,6 +80,16 @@ public class UserServiceImpl implements UserService<UUID> {
     @Override
     public User findByUsername(String username) {
         return userRepository.findByUsername(username).orElse(null);
+    }
+
+    @Override
+    public void activation(UUID id) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            user.setActive(true);
+            userRepository.save(user);
+        }
     }
 
 }

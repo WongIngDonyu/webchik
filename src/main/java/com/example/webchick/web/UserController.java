@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 @Controller
@@ -22,45 +23,60 @@ public class UserController {
 
     @GetMapping("/all")
     public String viewAllUsers(Model model){
-        model.addAttribute(userService.getAll());
+        List<UserDto> users = userService.getAll();
+        model.addAttribute("users", users);
         return "allUsers";
     }
 
     @GetMapping("/find/{id}")
     public String findUser(Model model, @PathVariable("id") UUID uuid){
-        model.addAttribute(userService.findUser(uuid));
-        return "findUser";
+        Optional<UserDto> dbUser = userService.findUser(uuid);
+        if(dbUser.isPresent()){
+            UserDto userDto = dbUser.get();
+            model.addAttribute("userDto", userDto);
+            return "findUser";
+        }
+        else {
+            return "userNotFound";
+        }
     }
 
-    @DeleteMapping("/delete/{id}")
+    @PostMapping("/delete/{id}")
     public String deleteUser(@PathVariable("id") UUID uuid){
         userService.delete(uuid);
         return "redirect:/user/all";
     }
 
+    @PostMapping("/activation/{id}")
+    public String activationUser(@PathVariable("id") UUID uuid){
+        userService.activation(uuid);
+        return "redirect:/user/all";
+    }
+
     @GetMapping("/create")
-    public String addNewUser(){
+    public String addNewUser(Model model){
+        model.addAttribute("userDto",new UserDto());
         return "addNewUser";
     }
 
     @PostMapping("/create")
-    public String addNewUser(@RequestBody UserDto userDto){
+    public String addNewUser(@ModelAttribute("userDto") UserDto userDto){
         userService.add(userDto);
         return "redirect:/user/all";
     }
     @GetMapping("/change/{id}")
     public String changeUser(Model model, @PathVariable("id") UUID uuid){
-        Optional<User> dbUser = userService.findUser(uuid);
+        Optional<UserDto> dbUser = userService.findUser(uuid);
         if (dbUser.isPresent()) {
-            UserDto userDto = modelMapper.map(dbUser.get(), UserDto.class);
-            model.addAttribute("model", userDto);
+            UserDto userDto = dbUser.get();
+            model.addAttribute("userDto", userDto);
             return "editUser";
         } else {
             return "userNotFound";
         }
     }
     @PostMapping("/change/{id}")
-    public String saveChangeUser(@PathVariable("id") UUID uuid, @RequestBody UserDto userDto) {
+    public String saveChangeUser(@PathVariable("id") UUID uuid, @ModelAttribute UserDto userDto) {
         Optional<User> dbUser = userService.findUser(uuid);
         if (dbUser.isPresent()) {
             userService.update(userDto);

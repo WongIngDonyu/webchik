@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Brand</title>
+</head>
+<body>
+<h1>Create New Brand</h1>
+<form th:action="@{/brand/create}" method="post" th:object="${brandDto}">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" th:field="*{name}" required>
+    <button type="submit">Create</button>
+</form>
+</body>
+</html>

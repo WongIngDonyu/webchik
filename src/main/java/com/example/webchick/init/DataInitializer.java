@@ -49,6 +49,9 @@ public class DataInitializer implements CommandLineRunner {
         modelDto.setName("alallala");
         modelDto.setBrand("ZOV");
         modelService.update(modelDto);
+        ModelDto m2 = new ModelDto(UUID.randomUUID(),"Zoo2222", Model.Category.Motorcycle, "SomeUrl", 2023, 2054,"LOX");
+        ModelDto modelDto1 = modelService.add(m2);
+        //System.out.println(modelDto.getBrand());
         UserRoleDto userRoleDto = new UserRoleDto(UUID.randomUUID(), UserRole.Role.User);
         UserRoleDto userRoleDto1 = userRoleService.add(userRoleDto);
         userRoleDto1.setRole(UserRole.Role.Admin);

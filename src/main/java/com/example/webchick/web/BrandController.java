@@ -25,46 +25,53 @@ public class BrandController {
 
     @GetMapping("/all")
     public String viewAllBrands(Model model){
-        List<Brand> brands = brandService.getAll();
+        List<BrandDto> brands = brandService.getAll();
         model.addAttribute("brands", brands);
         return "allBrands";
     }
 
     @GetMapping("/find/{id}")
     public String findBrand(Model model, @PathVariable("id") UUID uuid){
-        model.addAttribute(brandService.findBrand(uuid));
-        return "findBrand";
+        Optional<BrandDto> dbBrand = brandService.findBrand(uuid);
+        if (dbBrand.isPresent()) {
+            BrandDto brand = dbBrand.get();
+            model.addAttribute("brand", brand);
+            return "findBrand";
+        } else {
+            return "brandNotFound";
+        }
     }
-    @DeleteMapping("/delete/{id}")
+    @PostMapping("/delete/{id}")
     public String deleteBrand(@PathVariable("id") UUID uuid){
         brandService.delete(uuid);
         return "redirect:/brand/all";
     }
 
     @GetMapping("/create")
-    public String addNewBrand(){
+    public String addNewBrand(Model model){
+        model.addAttribute("brandDto", new BrandDto());
         return "addNewBrand";
     }
 
     @PostMapping("/create")
-    public String addNewBrand(@RequestBody BrandDto brandDto){
+    public String addNewBrand(@ModelAttribute("brandDto") BrandDto brandDto){
         brandService.add(brandDto);
         return "redirect:/brand/all";
     }
 
     @GetMapping("/change/{id}")
     public String changeBrand(Model model, @PathVariable("id") UUID uuid){
-        Optional<Brand> dbBrand = brandService.findBrand(uuid);
+        Optional<BrandDto> dbBrand = brandService.findBrand(uuid);
         if (dbBrand.isPresent()) {
-            BrandDto brandDto = modelMapper.map(dbBrand.get(), BrandDto.class);
-            model.addAttribute("brand", brandDto);
+            BrandDto brand = dbBrand.get();
+            model.addAttribute("brandDto", brand);
             return "editBrand";
         } else {
             return "brandNotFound";
         }
     }
     @PostMapping("/change/{id}")
-    public String saveChangeBrand(@PathVariable("id") UUID uuid, @RequestBody BrandDto brandDto) {
+    public String saveChangeBrand(@PathVariable("id") UUID uuid, @ModelAttribute("brandDto") BrandDto brandDto) {
         Optional<Brand> dbBrand = brandService.findBrand(uuid);
         if (dbBrand.isPresent()) {
             brandService.update(brandDto);
