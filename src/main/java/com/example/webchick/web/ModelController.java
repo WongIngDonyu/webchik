@@ -4,6 +4,7 @@ import com.example.webchick.services.ModelService;
 import com.example.webchick.services.dtos.BrandDto;
 import com.example.webchick.services.dtos.ModelDto;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,11 +16,10 @@ import java.util.UUID;
 @Controller
 @RequestMapping("/model")
 public class ModelController {
-    private final ModelService modelService;
-    private final ModelMapper modelMapper;
-    public ModelController(ModelService modelService, ModelMapper modelMapper) {
+    private ModelService modelService;
+    @Autowired
+    public void setModelService(ModelService modelService) {
         this.modelService = modelService;
-        this.modelMapper = modelMapper;
     }
 
     @GetMapping("/all")

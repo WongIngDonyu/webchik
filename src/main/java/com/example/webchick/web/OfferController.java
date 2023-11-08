@@ -4,6 +4,7 @@ import com.example.webchick.models.Offer;
 import com.example.webchick.services.OfferService;
 import com.example.webchick.services.dtos.OfferDto;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,11 +16,10 @@ import java.util.UUID;
 @Controller
 @RequestMapping("/offer")
 public class OfferController {
-    private final OfferService offerService;
-    private final ModelMapper modelMapper;
-    public OfferController(OfferService offerService, ModelMapper modelMapper) {
+    private  OfferService offerService;
+    @Autowired
+    public void setOfferService(OfferService offerService) {
         this.offerService = offerService;
-        this.modelMapper = modelMapper;
     }
 
     @GetMapping("/all")

@@ -4,6 +4,7 @@ import com.example.webchick.models.User;
 import com.example.webchick.services.UserService;
 import com.example.webchick.services.dtos.UserDto;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,13 +15,12 @@ import java.util.UUID;
 @Controller
 @RequestMapping("/user")
 public class UserController {
-    private final UserService userService;
-    private final ModelMapper modelMapper;
-    public UserController(UserService userService, ModelMapper modelMapper) {
-        this.userService = userService;
-        this.modelMapper = modelMapper;
-    }
 
+    private UserService userService;
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
     @GetMapping("/all")
     public String viewAllUsers(Model model){
         List<UserDto> users = userService.getAll();
@@ -85,4 +85,5 @@ public class UserController {
             return "userNotFound";
         }
     }
+
 }
