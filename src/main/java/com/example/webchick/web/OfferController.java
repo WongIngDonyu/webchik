@@ -3,7 +3,7 @@ package com.example.webchick.web;
 import com.example.webchick.models.Offer;
 import com.example.webchick.services.OfferService;
 import com.example.webchick.services.dtos.OfferDto;
-import org.modelmapper.ModelMapper;
+    import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

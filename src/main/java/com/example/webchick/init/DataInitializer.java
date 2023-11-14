@@ -47,7 +47,7 @@ public class DataInitializer implements CommandLineRunner {
         ModelDto m1 = new ModelDto(null,"Zoo1", Model.Category.Motorcycle, "SomeUrl", 2023, 2054,"Zoo");
         ModelDto modelDto = modelService.add(m1);
         modelDto.setName("alallala");
-        modelDto.setBrand("ZOV");
+        modelDto.setBrandName("ZOV");
         modelService.update(modelDto);
         ModelDto m2 = new ModelDto(null,"Zoo2222", Model.Category.Motorcycle, "SomeUrl", 2023, 2054,"LOX");
         ModelDto modelDto1 = modelService.add(m2);

@@ -54,7 +54,7 @@ public class ModelServiceImpl  implements ModelService<UUID> {
     @Override
     public ModelDto add(ModelDto model) {
         Model m = modelMapper.map(model, Model.class);
-        m.setBrand(brandService.findBrandByName(model.getBrand()));
+        m.setBrand(brandService.findBrandByName(model.getBrandName()));
         m.setCreated(LocalDateTime.now());
         return modelMapper.map(modelRepository.save(m), ModelDto.class);
     }
@@ -67,11 +67,11 @@ public class ModelServiceImpl  implements ModelService<UUID> {
         }
             Model model = dbModel.get();
             modelMapper.map(modelDto, model);
-            Optional<Brand> dbBrand = brandRepository.findByName(modelDto.getBrand());
+            Optional<Brand> dbBrand = brandRepository.findByName(modelDto.getBrandName());
             if (dbBrand.isEmpty()){
                 throw new NoSuchElementException("Brand not found");
             }
-            model.setBrand(brandService.findBrandByName(modelDto.getBrand()));
+            model.setBrand(brandService.findBrandByName(modelDto.getBrandName()));
             model.setModified(LocalDateTime.now());
             model.setCreated(dbModel.get().getCreated());
             return modelMapper.map(modelRepository.save(model), ModelDto.class);

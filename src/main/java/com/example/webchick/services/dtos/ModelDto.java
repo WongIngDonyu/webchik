@@ -11,17 +11,17 @@ public class ModelDto {
     private String imageUrl;
     private int startYear;
     private int endYear;
-    private String brand;
+    private String brandName;
     public ModelDto(){}
 
-    public ModelDto(UUID id, String name, Model.Category category, String imageUrl, int startYear, int endYear, String brand) {
+    public ModelDto(UUID id, String name, Model.Category category, String imageUrl, int startYear, int endYear, String brandName) {
         this.id = id;
         this.name = name;
         this.category = category;
         this.imageUrl = imageUrl;
         this.startYear = startYear;
         this.endYear = endYear;
-        this.brand = brand;
+        this.brandName = brandName;
     }
 
     public UUID getId() {
@@ -72,11 +72,11 @@ public class ModelDto {
         this.endYear = endYear;
     }
 
-    public String getBrand() {
-        return brand;
+    public String getBrandName() {
+        return brandName;
     }
 
-    public void setBrand(String brand) {
-        this.brand = brand;
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
     }
 }
