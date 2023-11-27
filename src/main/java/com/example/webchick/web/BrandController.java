@@ -2,12 +2,17 @@ package com.example.webchick.web;
 
 import com.example.webchick.models.Brand;
 import com.example.webchick.services.BrandService;
+import com.example.webchick.services.dtos.AddBrandDto;
 import com.example.webchick.services.dtos.BrandDto;
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
@@ -47,16 +52,31 @@ public class BrandController {
     }
 
     @GetMapping("/create")
-    public String addNewBrand(Model model){
-        model.addAttribute("brandDto", new BrandDto());
+    public String addNewBrand(){
         return "addNewBrand";
     }
 
+    @ModelAttribute("addBrandDto")
+    public AddBrandDto initBrand(){
+        return new AddBrandDto();
+    }
+
     @PostMapping("/create")
-    public String addNewBrand(@ModelAttribute("brandDto") BrandDto brandDto){
-        brandService.add(brandDto);
+    public String addNewBrand(@Valid AddBrandDto addBrandDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            bindingResult.getAllErrors().forEach(error -> {
+                System.out.println(error);
+            });
+            redirectAttributes.addFlashAttribute("addBrandDto", addBrandDto);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.addBrandDto",
+                    bindingResult);
+            return "redirect:/brand/create"; // Change the redirect URL if needed
+        }
+
+        brandService.add(addBrandDto);
         return "redirect:/brand/all";
     }
+
 
     @GetMapping("/change/{id}")
     public String changeBrand(Model model, @PathVariable("id") UUID uuid){

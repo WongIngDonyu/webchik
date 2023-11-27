@@ -56,7 +56,7 @@ public class ModelServiceImpl  implements ModelService<UUID> {
         Model m = modelMapper.map(model, Model.class);
         m.setBrand(brandService.findBrandByName(model.getBrandName()));
         m.setCreated(LocalDateTime.now());
-        return modelMapper.map(modelRepository.save(m), ModelDto.class);
+        return modelMapper.map(modelRepository.saveAndFlush(m), ModelDto.class);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class ModelServiceImpl  implements ModelService<UUID> {
             model.setBrand(brandService.findBrandByName(modelDto.getBrandName()));
             model.setModified(LocalDateTime.now());
             model.setCreated(dbModel.get().getCreated());
-            return modelMapper.map(modelRepository.save(model), ModelDto.class);
+            return modelMapper.map(modelRepository.saveAndFlush(model), ModelDto.class);
         }
 
     @Override

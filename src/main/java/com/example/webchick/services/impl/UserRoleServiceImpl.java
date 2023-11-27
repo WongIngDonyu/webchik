@@ -46,7 +46,7 @@ public class UserRoleServiceImpl implements UserRoleService<UUID> {
     @Override
     public UserRoleDto add(UserRoleDto userRole) {
         UserRole u = modelMapper.map(userRole, UserRole.class);
-        return modelMapper.map(userRoleRepository.save(u), UserRoleDto.class);
+        return modelMapper.map(userRoleRepository.saveAndFlush(u), UserRoleDto.class);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class UserRoleServiceImpl implements UserRoleService<UUID> {
         }
         else {
             UserRole userRole1 = modelMapper.map(userRole, UserRole.class);
-            return modelMapper.map(userRoleRepository.save(userRole1), UserRoleDto.class);
+            return modelMapper.map(userRoleRepository.saveAndFlush(userRole1), UserRoleDto.class);
         }
     }
 

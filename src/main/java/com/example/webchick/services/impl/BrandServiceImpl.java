@@ -3,6 +3,7 @@ package com.example.webchick.services.impl;
 import com.example.webchick.models.Brand;
 import com.example.webchick.repositories.BrandRepository;
 import com.example.webchick.services.BrandService;
+import com.example.webchick.services.dtos.AddBrandDto;
 import com.example.webchick.services.dtos.BrandDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -45,10 +46,10 @@ public class BrandServiceImpl implements BrandService<UUID> {
     }
 
     @Override
-    public BrandDto add(BrandDto brand) {
+    public AddBrandDto add(AddBrandDto brand) {
         Brand b = modelMapper.map(brand, Brand.class);
         b.setCreated(LocalDateTime.now());
-        return modelMapper.map(brandRepository.save(b), BrandDto.class);
+        return modelMapper.map(brandRepository.saveAndFlush(b), AddBrandDto.class);
     }
 
     @Override
@@ -61,7 +62,7 @@ public class BrandServiceImpl implements BrandService<UUID> {
             Brand brand1 = modelMapper.map(brandDto, Brand.class);
             brand1.setCreated(dbBrand.get().getCreated());
             brand1.setModified(LocalDateTime.now());
-            return modelMapper.map(brandRepository.save(brand1), BrandDto.class);
+            return modelMapper.map(brandRepository.saveAndFlush(brand1), BrandDto.class);
         }
     }
 

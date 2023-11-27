@@ -38,7 +38,7 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void seedData() throws IOException {
-        BrandDto b1 = new BrandDto(null,"Zoo");
+        /*  BrandDto b1 = new BrandDto(null,"Zoo");
         BrandDto sb1 = brandService.add(b1);
         BrandDto b2 = new BrandDto(null,"ZOV");
         BrandDto sb2 = brandService.add(b2);
@@ -68,6 +68,6 @@ public class DataInitializer implements CommandLineRunner {
         OfferDto offerDto1 = offerService.add(offerDto);
         System.out.println(userService.findByUsername(offerDto1.getUsername()));
         offerDto1.setPrice(6666);
-        offerService.update(offerDto1);
+        offerService.update(offerDto1);*/
     }
 }

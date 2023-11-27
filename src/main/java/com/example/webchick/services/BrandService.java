@@ -1,6 +1,7 @@
 package com.example.webchick.services;
 
 import com.example.webchick.models.Brand;
+import com.example.webchick.services.dtos.AddBrandDto;
 import com.example.webchick.services.dtos.BrandDto;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public interface BrandService <I extends UUID>{
 
     Optional<BrandDto> findBrand(UUID id);
 
-    BrandDto add(BrandDto brand);
+    AddBrandDto add(AddBrandDto brand);
     BrandDto update(BrandDto brand);
     Brand findBrandByName(String brandName);
 }

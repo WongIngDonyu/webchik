@@ -63,7 +63,7 @@ public class OfferServiceImpl implements OfferService<UUID> {
         o.setUser(userService.findByUsername(offer.getUsername()));
         o.setModel(modelService.findByName(offer.getModelName()));
         o.setCreated(LocalDateTime.now());
-        return modelMapper.map(offerRepository.save(o), OfferDto.class);
+        return modelMapper.map(offerRepository.saveAndFlush(o), OfferDto.class);
     }
 
     @Override
@@ -86,7 +86,7 @@ public class OfferServiceImpl implements OfferService<UUID> {
         offer.setModel(modelService.findByName(offerDto.getModelName()));
             offer.setModified(LocalDateTime.now());
             offer.setCreated(dbOffer.get().getCreated());
-            return modelMapper.map(offerRepository.save(offer), OfferDto.class);
+            return modelMapper.map(offerRepository.saveAndFlush(offer), OfferDto.class);
 
     }
 }

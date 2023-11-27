@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService<UUID> {
         u.setUserRole(userRoleService.findRoleByName(user.getRole()));
         u.setCreated(LocalDateTime.now());
         u.setActive(true);
-        return modelMapper.map(userRepository.save(u), UserDto.class);
+        return modelMapper.map(userRepository.saveAndFlush(u), UserDto.class);
     }
 
     @Override
@@ -70,11 +70,10 @@ public class UserServiceImpl implements UserService<UUID> {
             throw new NoSuchElementException("User not found");
         }
             User user1 = dbUser.get();
-
             user1.setUserRole(userRoleService.findRoleByName(userDto.getRole()));
             user1.setModified(LocalDateTime.now());
             user1.setCreated(dbUser.get().getCreated());
-            return modelMapper.map(userRepository.save(user1), UserDto.class);
+            return modelMapper.map(userRepository.saveAndFlush(user1), UserDto.class);
         }
 
     @Override
@@ -88,7 +87,7 @@ public class UserServiceImpl implements UserService<UUID> {
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             user.setActive(true);
-            userRepository.save(user);
+            userRepository.saveAndFlush(user);
         }
     }
 
